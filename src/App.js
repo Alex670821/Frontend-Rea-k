@@ -1,23 +1,17 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Login from './componentes/Login';
-import LoginRegister from './componentes/LoginRegister/LoginRegister';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './componentes/LoginRegister/Login';
+import Stream from './componentes/Stream';
 
-function App() {
-    return (
-
-    
-        <Router>
-            <Routes>
-                <Route path="/" element={<Navigate to="/login" />} />
-
-                <Route path="/login" element={<LoginRegister />} />
-                {/* Agrega otras rutas aquí */}
-            </Routes>
-        </Router>
-
-        
-    );
-}
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/stream" element={<Stream />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;
