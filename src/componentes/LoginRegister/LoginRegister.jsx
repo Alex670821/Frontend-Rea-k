@@ -1,7 +1,9 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import './LoginRegister.css';
 import { FaUserAlt, FaLock, FaEnvelope, FaGoogle } from 'react-icons/fa';
+import { signInWithPopup, GoogleAuthProvider, getAuth } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../../firebaseConfig';
 
 const LoginRegister = () => {
   const [action, setAction] = useState('');
@@ -9,6 +11,7 @@ const LoginRegister = () => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [loginError, setLoginError] = useState(null);
+  const navigate = useNavigate();
 
   const registerLink = () => {
     setAction(' active');
@@ -18,14 +21,20 @@ const LoginRegister = () => {
     setAction('');
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async () => {
+    const provider = new GoogleAuthProvider();
     try {
-      // Redirige a la página de inicio de sesión de Google
-      window.location.href = 'http://127.0.0.1:5000/login';
+      const result = await signInWithPopup(auth, provider);
+      console.log('User Info:', result.user);
+      navigate('/stream'); // Redirige a la página de stream después del inicio de sesión exitoso
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
+      console.error('Error al iniciar sesión con Google:', error);
     }
+  };
+
+  const handleSubmitRegister = (e) => {
+    e.preventDefault();
+    // Lógica para manejar el registro de usuario
   };
 
   const handleSubmitLogin = (e) => {
@@ -34,7 +43,7 @@ const LoginRegister = () => {
       setLoginError('Por favor complete todos los campos');
       return;
     }
-    // Aquí puedes enviar los datos del login al backend si fuera necesario
+    // Lógica para manejar el inicio de sesión
   };
 
   return (
@@ -66,7 +75,7 @@ const LoginRegister = () => {
             <label>
               <input type="checkbox" /> Recordarme
             </label>
-            <a href="#"> Olvidaste la contraseña</a>
+            <span> Olvidaste la contraseña</span>
           </div>
           {loginError && <p className="error">{loginError}</p>}
           <button type='submit'>Login</button>
@@ -75,13 +84,13 @@ const LoginRegister = () => {
           </div>
           <button type="button" onClick={handleLogin}><FaGoogle /> Continua con Google </button>
           <div className="register-link">
-            <p>No tienes una cuenta? <a href="#" onClick={registerLink}>Registrate</a></p>
+            <p>No tienes una cuenta? <span onClick={registerLink}>Registrate</span></p>
           </div>
         </form>
       </div>
 
       <div className='form-box register'>
-        <form action="">
+        <form onSubmit={handleSubmitRegister}>
           <h1>Registro</h1>
           <div className="input-box">
             <input
@@ -118,7 +127,7 @@ const LoginRegister = () => {
           </div>
           <button type='submit'>Registrarse</button>
           <div className="register-link">
-            <p> Ya tienes una cuenta? <a href="#" onClick={loginLink}>Login</a></p>
+            <p> Ya tienes una cuenta? <span onClick={loginLink}>Login</span></p>
           </div>
         </form>
       </div>

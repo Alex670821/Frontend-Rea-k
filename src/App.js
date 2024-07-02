@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './componentes/LoginRegister/Login';
+import Login from './componentes/LoginRegister/LoginRegister';
 import Stream from './componentes/Stream';
 
 const App = () => {
